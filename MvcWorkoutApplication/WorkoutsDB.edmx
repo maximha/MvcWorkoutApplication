@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="db_appModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="task">
+          <Key>
+            <PropertyRef Name="taskName" />
+          </Key>
+          <Property Name="taskName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="workoutName" Type="varchar" MaxLength="20" />
+          <Property Name="description" Type="varchar" MaxLength="20" />
+          <Property Name="time" Type="varchar" MaxLength="10" />
+          <Property Name="rev" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userName" />
+          </Key>
+          <Property Name="userName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="firstName" Type="varchar" MaxLength="20" />
+          <Property Name="lastName" Type="varchar" MaxLength="20" />
+          <Property Name="password" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="workouts">
+          <Key>
+            <PropertyRef Name="workoutName" />
+          </Key>
+          <Property Name="workoutName" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="20" />
+          <Property Name="inStorage" Type="bool" />
+        </EntityType>
+        <EntityContainer Name="db_appModelStoreContainer">
+          <EntitySet Name="task" EntityType="Self.task" Schema="db_app" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="db_app" store:Type="Tables" />
+          <EntitySet Name="workouts" EntityType="Self.workouts" Schema="db_app" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="db_appModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="task">
+          <Key>
+            <PropertyRef Name="taskName" />
+          </Key>
+          <Property Name="taskName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="workoutName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="description" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="time" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="rev" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="userName" />
+          </Key>
+          <Property Name="userName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="firstName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="lastName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="workout">
+          <Key>
+            <PropertyRef Name="workoutName" />
+          </Key>
+          <Property Name="workoutName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="userName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="inStorage" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="db_appEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tasks" EntityType="Self.task" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <EntitySet Name="workouts" EntityType="Self.workout" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="db_appModelStoreContainer" CdmEntityContainer="db_appEntities">
+          <EntitySetMapping Name="tasks">
+            <EntityTypeMapping TypeName="db_appModel.task">
+              <MappingFragment StoreEntitySet="task">
+                <ScalarProperty Name="taskName" ColumnName="taskName" />
+                <ScalarProperty Name="workoutName" ColumnName="workoutName" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="rev" ColumnName="rev" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="db_appModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="workouts">
+            <EntityTypeMapping TypeName="db_appModel.workout">
+              <MappingFragment StoreEntitySet="workouts">
+                <ScalarProperty Name="workoutName" ColumnName="workoutName" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="inStorage" ColumnName="inStorage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

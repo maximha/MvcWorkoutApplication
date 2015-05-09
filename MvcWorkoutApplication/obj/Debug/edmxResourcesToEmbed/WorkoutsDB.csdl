@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="db_appModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="task">
+    <Key>
+      <PropertyRef Name="taskName" />
+    </Key>
+    <Property Name="taskName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="workoutName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="description" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="time" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="rev" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="user">
+    <Key>
+      <PropertyRef Name="userName" />
+    </Key>
+    <Property Name="userName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="firstName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="lastName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="workout">
+    <Key>
+      <PropertyRef Name="workoutName" />
+    </Key>
+    <Property Name="workoutName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="userName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="inStorage" Type="Boolean" />
+  </EntityType>
+  <EntityContainer Name="db_appEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tasks" EntityType="Self.task" />
+    <EntitySet Name="users" EntityType="Self.user" />
+    <EntitySet Name="workouts" EntityType="Self.workout" />
+  </EntityContainer>
+</Schema>

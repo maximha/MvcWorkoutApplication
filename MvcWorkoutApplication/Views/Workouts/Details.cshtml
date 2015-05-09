@@ -1,0 +1,29 @@
+﻿@model MvcWorkoutApplication.workout
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>workout</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.workoutName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.workoutName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.userName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.userName)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id=Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
