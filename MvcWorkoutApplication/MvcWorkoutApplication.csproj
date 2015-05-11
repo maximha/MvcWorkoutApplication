@@ -150,7 +150,7 @@
     <Compile Include="Api Models\Globals.cs" />
     <Compile Include="Api Models\LoginModel.cs" />
     <Compile Include="Api Models\RegistrationModel.cs" />
-    <Compile Include="Api Models\StoragePlaceModel.cs" />
+    <Compile Include="Api Models\StorageModel.cs" />
     <Compile Include="Api Models\TaskModel.cs" />
     <Compile Include="Api Models\WorkoutModel.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -187,6 +187,7 @@
     <Compile Include="Models\ItemTaskModel.cs" />
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\ResultModel.cs" />
+    <Compile Include="Models\storageModelList.cs" />
     <Compile Include="Models\taskModelList.cs" />
     <Compile Include="Models\workoutModelList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

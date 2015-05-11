@@ -97,27 +97,48 @@ namespace MvcWorkoutApplication.Helpers
             return taskModel;
         }
 
-        //=============================================================================================
-        public static workoutModelList storagelistRessult()
+        public static ItemTaskModel storageTaskPropertyResult(string _workoutName , string _taskName)
         {
             //connect to db
             db_appEntities db = new db_appEntities();
-            List<String> names = db.workouts.Where(s => s.inStorage == true).Select(s => s.workoutName).ToList();
-            /*for (int i = 0; i < names.Count; i++)
-            {
-                names[i] = CryptHelper.Encrypt(names[i]);
-            }*/
+            task _task = db.tasks.Where(x => x.workoutName == _workoutName && x.taskName == _taskName).SingleOrDefault();
+
+            _task.workoutName = CryptHelper.Encrypt(_task.workoutName);
+            _task.taskName = CryptHelper.Encrypt(_task.taskName);
+            _task.description = CryptHelper.Encrypt(_task.description);
+            _task.time = CryptHelper.Encrypt(_task.time);
+            _task.rev = CryptHelper.Encrypt(_task.rev);
+
             db.Dispose();
 
-            workoutModelList workoutModel = new workoutModelList
+            ItemTaskModel taskModel = new ItemTaskModel
             {
                 result = true,
-                workouts = names
+                itemTask = _task
             };
-            return workoutModel;
+            return taskModel;
         }
 
-        //=============================================================================================
+        public static storageModelList storagelistRessult()
+        {
+            //connect to db
+            db_appEntities db = new db_appEntities();
+            List<workout> storageList = db.workouts.Where(s => s.inStorage == true).ToList();
+            for (int i = 0; i < storageList.Count; i++)
+            {
+                storageList[i].userName = CryptHelper.Encrypt(storageList[i].userName);
+                storageList[i].workoutName = CryptHelper.Encrypt(storageList[i].workoutName);
+                storageList[i].inStorage = storageList[i].inStorage;
+            }
+            db.Dispose();
+
+            storageModelList storageModel = new storageModelList
+            {
+                result = true,
+                storageWorkouts = storageList
+            };
+            return storageModel;
+        }
 
         private static string encodeKey(string key, string userKey)
         {

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MvcWorkoutApplication.Api_Models
 {
-    public class StoragePlaceModel
+    public class StorageModel
     {
         public string workoutName { get; set; }
 

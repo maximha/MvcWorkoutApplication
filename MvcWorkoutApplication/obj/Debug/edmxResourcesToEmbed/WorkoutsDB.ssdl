@@ -6,7 +6,7 @@
     </Key>
     <Property Name="taskName" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="workoutName" Type="varchar" MaxLength="20" />
-    <Property Name="description" Type="varchar" MaxLength="20" />
+    <Property Name="description" Type="varchar" MaxLength="200" />
     <Property Name="time" Type="varchar" MaxLength="10" />
     <Property Name="rev" Type="varchar" MaxLength="10" />
   </EntityType>

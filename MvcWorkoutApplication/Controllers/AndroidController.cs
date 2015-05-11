@@ -126,6 +126,30 @@ namespace MvcWorkoutApplication.Controllers
             }
             return ResultHelper.boolResult(false, "TaskName already exist");
         }
+        // Add to Storage
+        [System.Web.Http.HttpPost]
+        public AbstractModel AddToStorage(StorageModel storageModel) 
+        {
+            StorageModel decryptedModel = new StorageModel();
+            decryptedModel.userName = CryptHelper.Decrypt(storageModel.userName);
+            decryptedModel.workoutName = CryptHelper.Decrypt(storageModel.workoutName);
+            decryptedModel.inStorage = storageModel.inStorage;
+
+            //check if workoutName allow to workout
+            workout _workoutName = checkWorkout(decryptedModel.workoutName);
+            if (_workoutName != null)
+            {
+                //try to add new workout
+                bool didAddToStorage = addToStorage(decryptedModel.userName, decryptedModel.workoutName, decryptedModel.inStorage);
+                if (didAddToStorage)
+                {
+                    return ResultHelper.boolResult(true, "Adding Workout To Storage success");
+                }
+                return ResultHelper.boolResult(false, "Adding Workout To Storage failure");
+            }
+            return ResultHelper.boolResult(false, "Workout already in the Storage");
+            
+        }
 
         //Delete function
         [System.Web.Http.HttpPost]
@@ -194,6 +218,12 @@ namespace MvcWorkoutApplication.Controllers
         }
 
         [System.Web.Http.HttpPost]
+        public AbstractModel GetStorageWorkoutsList()
+        {
+            return ResultHelper.storagelistRessult();
+        }
+
+        [System.Web.Http.HttpPost]
         public AbstractModel TaskByName(TaskModel taskModel)
         {
             TaskModel decryptedModel = new TaskModel();
@@ -209,6 +239,25 @@ namespace MvcWorkoutApplication.Controllers
             }
             //return ResultHelper.taskByNameResult(taskModel.taskName);
             return ResultHelper.taskByNameResult(decryptedModel.taskName);
+        }
+
+        [System.Web.Http.HttpPost]
+        public AbstractModel StorageTaskProperty(TaskModel taskModel)
+        {
+            TaskModel decryptedModel = new TaskModel();
+            decryptedModel.workoutName = CryptHelper.Decrypt(taskModel.workoutName);
+            decryptedModel.taskName = CryptHelper.Decrypt(taskModel.taskName);
+
+
+            // get task by name
+            task _task = findTaskByWorkoutName(decryptedModel.workoutName , decryptedModel.taskName);
+            //task _task = findTask(taskModel.taskName);
+            if (_task == null)
+            {
+                return ResultHelper.boolResult(false, "Task not exist !!!");
+            }
+            //return ResultHelper.taskByNameResult(taskModel.taskName);
+            return ResultHelper.storageTaskPropertyResult(decryptedModel.workoutName ,decryptedModel.taskName);
         }
         #endregion
 
@@ -295,6 +344,20 @@ namespace MvcWorkoutApplication.Controllers
             db_appEntities db = new db_appEntities();
             //get task by taskName
             task _task = db.tasks.Where(x => x.taskName == taskName).SingleOrDefault();
+            db.Dispose();
+            //check if task exist
+            if (_task == null)
+            {
+                return null;
+            }
+            return _task;
+        }
+
+        private static task findTaskByWorkoutName(string workoutName ,string taskName)
+        {
+            db_appEntities db = new db_appEntities();
+            //get task by taskName
+            task _task = db.tasks.Where(x => x.workoutName == workoutName && x.taskName == taskName).SingleOrDefault();
             db.Dispose();
             //check if task exist
             if (_task == null)
@@ -398,11 +461,42 @@ namespace MvcWorkoutApplication.Controllers
                 newTask.rev = revTask;
 
                 db.tasks.Add(newTask);
+                //db.Entry(newTask).State = EntityState.Added;
                 db.SaveChanges();
                 flag = true;
             }
             catch (Exception e)
             {}
+            if (flag == true)
+                return true;
+            else
+            {
+                db.Dispose();
+                return false;
+            }
+        }
+
+        private static bool addToStorage(string _userName, string _workoutName, bool _inStorage)
+        {
+            bool flag = false;
+            //connect to db
+            db_appEntities db = new db_appEntities();
+            workout workoutToUpade = findWorkoutByUsername(_userName, _workoutName);
+            if (workoutToUpade == null)
+            {
+                return false;
+            }
+            try
+            {
+                workoutToUpade.inStorage = true;
+
+                db.Entry(workoutToUpade).State = EntityState.Modified;
+
+                db.SaveChanges();
+                flag = true;
+            }
+            catch (Exception e)
+            { }
             if (flag == true)
                 return true;
             else
