@@ -147,6 +147,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api Models\FavoritesModel.cs" />
     <Compile Include="Api Models\Globals.cs" />
     <Compile Include="Api Models\LoginModel.cs" />
     <Compile Include="Api Models\RegistrationModel.cs" />
@@ -177,6 +178,9 @@
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WorkoutsController.cs" />
+    <Compile Include="favorite.cs">
+      <DependentUpon>WorkoutsDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -184,6 +188,7 @@
     <Compile Include="Helpers\ResultHelper.cs" />
     <Compile Include="Helpers\RSAHelper.cs" />
     <Compile Include="Models\AbstractModel.cs" />
+    <Compile Include="Models\favoritesModelList.cs" />
     <Compile Include="Models\ItemTaskModel.cs" />
     <Compile Include="Models\LogModel.cs" />
     <Compile Include="Models\ResultModel.cs" />

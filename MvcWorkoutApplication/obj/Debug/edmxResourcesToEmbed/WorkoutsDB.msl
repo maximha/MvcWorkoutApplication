@@ -1,6 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="db_appModelStoreContainer" CdmEntityContainer="db_appEntities">
+    <EntitySetMapping Name="favorites">
+      <EntityTypeMapping TypeName="db_appModel.favorite">
+        <MappingFragment StoreEntitySet="favorites">
+          <ScalarProperty Name="masterUser" ColumnName="masterUser" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="workoutName" ColumnName="workoutName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tasks">
       <EntityTypeMapping TypeName="db_appModel.task">
         <MappingFragment StoreEntitySet="task">

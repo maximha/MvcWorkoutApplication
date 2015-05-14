@@ -140,6 +140,27 @@ namespace MvcWorkoutApplication.Helpers
             return storageModel;
         }
 
+        public static favoritesModelList favoriteslistRessult(string masterUserName)
+        {
+            //connect to db
+            db_appEntities db = new db_appEntities();
+            List<favorite> workoutsList = db.favorites.Where(s => s.masterUser == masterUserName).ToList();
+            for (int i = 0; i < workoutsList.Count; i++)
+            {
+                workoutsList[i].masterUser = CryptHelper.Encrypt(workoutsList[i].masterUser);
+                workoutsList[i].userName = CryptHelper.Encrypt(workoutsList[i].userName);
+                workoutsList[i].workoutName = CryptHelper.Encrypt(workoutsList[i].workoutName);
+            }
+            db.Dispose();
+
+            favoritesModelList favoritesModel = new favoritesModelList
+            {
+                result = true,
+                favoritesWorkouts = workoutsList
+            };
+            return favoritesModel;
+        }
+
         private static string encodeKey(string key, string userKey)
         {
             byte[] keyBytes = Convert.FromBase64String(key);

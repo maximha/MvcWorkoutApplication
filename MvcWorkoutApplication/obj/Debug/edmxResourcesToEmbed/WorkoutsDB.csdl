@@ -1,5 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="db_appModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="favorite">
+    <Key>
+      <PropertyRef Name="masterUser" />
+      <PropertyRef Name="userName" />
+      <PropertyRef Name="workoutName" />
+    </Key>
+    <Property Name="masterUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="userName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="workoutName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
   <EntityType Name="task">
     <Key>
       <PropertyRef Name="taskName" />
@@ -28,6 +38,7 @@
     <Property Name="inStorage" Type="Boolean" />
   </EntityType>
   <EntityContainer Name="db_appEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="favorites" EntityType="Self.favorite" />
     <EntitySet Name="tasks" EntityType="Self.task" />
     <EntitySet Name="users" EntityType="Self.user" />
     <EntitySet Name="workouts" EntityType="Self.workout" />

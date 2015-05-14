@@ -1,5 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="db_appModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.6" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="favorites">
+    <Key>
+      <PropertyRef Name="masterUser" />
+      <PropertyRef Name="userName" />
+      <PropertyRef Name="workoutName" />
+    </Key>
+    <Property Name="masterUser" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="userName" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="workoutName" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
   <EntityType Name="task">
     <Key>
       <PropertyRef Name="taskName" />
@@ -28,6 +38,7 @@
     <Property Name="inStorage" Type="bool" />
   </EntityType>
   <EntityContainer Name="db_appModelStoreContainer">
+    <EntitySet Name="favorites" EntityType="Self.favorites" Schema="db_app" store:Type="Tables" />
     <EntitySet Name="task" EntityType="Self.task" Schema="db_app" store:Type="Tables" />
     <EntitySet Name="user" EntityType="Self.user" Schema="db_app" store:Type="Tables" />
     <EntitySet Name="workouts" EntityType="Self.workouts" Schema="db_app" store:Type="Tables" />

@@ -151,6 +151,30 @@ namespace MvcWorkoutApplication.Controllers
             
         }
 
+        //AddWorkout to Favorites function
+        [System.Web.Http.HttpPost]
+        public AbstractModel AddWorkoutToFavorites(FavoritesModel workoutModel)
+        {
+            FavoritesModel decryptedModel = new FavoritesModel();
+            decryptedModel.masterUserName = CryptHelper.Decrypt(workoutModel.masterUserName);
+            decryptedModel.userName = CryptHelper.Decrypt(workoutModel.userName);
+            decryptedModel.workoutName = CryptHelper.Decrypt(workoutModel.workoutName);
+
+            //check if workoutName allow to workout
+            favorite _favoriteWorkout = checkFavoriteWorkout(decryptedModel.masterUserName, decryptedModel.userName, decryptedModel.workoutName);
+            if (_favoriteWorkout == null)
+            {
+                //try to add new workout
+                bool didAddWorkout = addWorkoutToTableFavorites(decryptedModel.masterUserName, decryptedModel.userName, decryptedModel.workoutName);
+                if (didAddWorkout)
+                {
+                    return ResultHelper.boolResult(true, "Adding Workout success");
+                }
+                return ResultHelper.boolResult(false, "Adding Workout failure");
+            }
+            return ResultHelper.boolResult(false, "Workout already exist in favorites");
+        }
+
         //Delete function
         [System.Web.Http.HttpPost]
         public AbstractModel DeleteWorkout(WorkoutModel workoutModel)
@@ -167,6 +191,24 @@ namespace MvcWorkoutApplication.Controllers
             }
             return ResultHelper.boolResult(false, "Deleting Workout failure");
         }
+
+        [System.Web.Http.HttpPost]
+        public AbstractModel DeleteWorkoutFromFavoritesList(FavoritesModel favoritesModel)
+        {
+            FavoritesModel decryptedModel = new FavoritesModel();
+            decryptedModel.masterUserName = CryptHelper.Decrypt(favoritesModel.masterUserName);
+            decryptedModel.userName = CryptHelper.Decrypt(favoritesModel.userName);
+            decryptedModel.workoutName = CryptHelper.Decrypt(favoritesModel.workoutName);
+
+            //try to delete workout
+            bool didDeleteWorkout = deleteWorkoutFromList(decryptedModel.masterUserName, decryptedModel.userName, decryptedModel.workoutName);
+            if (didDeleteWorkout)
+            {
+                return ResultHelper.boolResult(true, "Deleting Workout success");
+            }
+            return ResultHelper.boolResult(false, "Deleting Workout failure");
+        }
+
         [System.Web.Http.HttpPost]
         public AbstractModel DeleteTask(TaskModel taskModel)
         {
@@ -241,6 +283,20 @@ namespace MvcWorkoutApplication.Controllers
             return ResultHelper.taskByNameResult(decryptedModel.taskName);
         }
 
+
+        [System.Web.Http.HttpPost]
+        public AbstractModel FavoritesList(LoginModel loginModel)
+        {
+            LoginModel decryptedModel = new LoginModel();
+            decryptedModel.userName = CryptHelper.Decrypt(loginModel.userName);
+            user user = findUser(decryptedModel.userName);
+            if (user == null)
+            {
+                return ResultHelper.boolResult(false, "User not exist !!!");
+            }
+            return ResultHelper.favoriteslistRessult(decryptedModel.userName);
+        }
+
         [System.Web.Http.HttpPost]
         public AbstractModel StorageTaskProperty(TaskModel taskModel)
         {
@@ -287,6 +343,21 @@ namespace MvcWorkoutApplication.Controllers
             db.Dispose();
             //check if workout exist and if workoutName is correct
             if (_workout == null || !workout.Equals(workoutName, workoutName))
+            {
+                return null;
+            }
+            return _workout;
+        }
+
+        private static favorite checkFavoriteWorkout(string _masterUserName, string _userName, string _workoutName)
+        {
+            //connect to db
+            db_appEntities db = new db_appEntities();
+            //get workout by workoutName
+            favorite _workout = db.favorites.Where(x =>x.masterUser == _masterUserName && x.userName == _userName && x.workoutName == _workoutName).SingleOrDefault();
+            db.Dispose();
+            //check if workout exist and if workoutName is correct
+            if (_workout == null )
             {
                 return null;
             }
@@ -415,7 +486,8 @@ namespace MvcWorkoutApplication.Controllers
             if (newWorkout != null)
             {
                 return false;
-            } try 
+            } 
+            try 
             {
                 newWorkout = new workout();
                 //if workout not exist create new workout
@@ -429,6 +501,41 @@ namespace MvcWorkoutApplication.Controllers
             }
             catch (Exception e)
             {}
+            if (flag == true)
+                return true;
+            else
+            {
+                db.Dispose();
+                return false;
+            }
+        }
+
+        private static bool addWorkoutToTableFavorites(string masterUserName, string userName, string workoutName)
+        {
+            bool flag = false;
+            //connect to db
+            db_appEntities db = new db_appEntities();
+
+            ////check if workout exist in DB
+            //favorite newWorkout = findWorkout(workoutName);
+            //if (newWorkout != null)
+            //{
+            //    return false;
+            //} 
+            try
+            {
+                favorite newWorkout = new favorite();
+                //if workout not exist create new workout
+                newWorkout.masterUser = masterUserName;
+                newWorkout.userName = userName;
+                newWorkout.workoutName = workoutName;
+
+                db.favorites.Add(newWorkout);
+                db.SaveChanges();
+                flag = true;
+            }
+            catch (Exception e)
+            { }
             if (flag == true)
                 return true;
             else
@@ -578,6 +685,35 @@ namespace MvcWorkoutApplication.Controllers
             }
         }
 
+        private static bool deleteWorkoutFromList(string _mastersUerName, string _userName, string _workoutName)
+        {
+            bool flag = false;
+            //connect to db
+            db_appEntities db = new db_appEntities();
+            //check if workout exist in DB
+            favorite delWorkout = checkFavoriteWorkout(_mastersUerName, _userName, _workoutName);
+
+            if (delWorkout == null)
+            {
+                return false;
+            }
+            try
+            {
+                db.Entry(delWorkout).State = EntityState.Deleted;
+                db.SaveChanges();
+                flag = true;
+            }
+            catch (Exception e)
+            { }
+            if (flag == true)
+                return true;
+            else
+            {
+                db.Dispose();
+                return false;
+            }
+        }
+
         private static List<task> findAllTasks(string workoutName)
         {
             db_appEntities db = new db_appEntities();
@@ -636,13 +772,7 @@ namespace MvcWorkoutApplication.Controllers
             return _workout;
         }
         #endregion
-        //=============================================================================
-        [System.Web.Http.HttpPost]
-        public AbstractModel StorageList(WorkoutModel workoutModel)
-        {
-            return ResultHelper.storagelistRessult();
-        }
 
-        //=============================================================================
+        
     }
 }

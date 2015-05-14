@@ -25,6 +25,7 @@ namespace MvcWorkoutApplication
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<favorite> favorites { get; set; }
         public DbSet<task> tasks { get; set; }
         public DbSet<user> users { get; set; }
         public DbSet<workout> workouts { get; set; }
