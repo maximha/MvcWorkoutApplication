@@ -26,7 +26,7 @@ namespace MvcWorkoutApplication.Helpers
              */
             string aesKey = CryptHelper.generateAESKey();
 
-            Globals.global_AES_Key = aesKey; //????
+            Globals.global_AES_Key = aesKey; 
 
 
             LogModel logModel = new LogModel
@@ -159,6 +159,26 @@ namespace MvcWorkoutApplication.Helpers
                 favoritesWorkouts = workoutsList
             };
             return favoritesModel;
+        }
+
+        public static UserProperty getUserPropertyResult(string _userName) 
+        {
+            //connect to db
+            db_appEntities db = new db_appEntities();
+            user _user = db.users.Where(x => x.userName == _userName).SingleOrDefault();
+            _user.firstName = CryptHelper.Encrypt(_user.firstName);
+            _user.lastName = CryptHelper.Encrypt(_user.lastName);
+            _user.userName = CryptHelper.Encrypt(_user.userName);
+            _user.password = CryptHelper.Encrypt(_user.password);
+
+            db.Dispose();
+
+            UserProperty userPropertyModel = new UserProperty
+            {
+                result = true,
+                userProperty = _user
+            };
+            return userPropertyModel;
         }
 
         private static string encodeKey(string key, string userKey)

@@ -194,6 +194,7 @@
     <Compile Include="Models\ResultModel.cs" />
     <Compile Include="Models\storageModelList.cs" />
     <Compile Include="Models\taskModelList.cs" />
+    <Compile Include="Models\UserProperty.cs" />
     <Compile Include="Models\workoutModelList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="task.cs">

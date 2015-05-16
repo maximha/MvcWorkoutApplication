@@ -315,6 +315,21 @@ namespace MvcWorkoutApplication.Controllers
             //return ResultHelper.taskByNameResult(taskModel.taskName);
             return ResultHelper.storageTaskPropertyResult(decryptedModel.workoutName ,decryptedModel.taskName);
         }
+
+        [System.Web.Http.HttpPost]
+        public AbstractModel GetUserProperty(LoginModel loginModel)
+        {
+            LoginModel decryptedModel = new LoginModel();
+            decryptedModel.userName = CryptHelper.Decrypt(loginModel.userName);
+
+            user user = findUser(decryptedModel.userName);
+
+            if (user == null)
+            {
+                return ResultHelper.boolResult(false, "User not found");
+            }
+            return ResultHelper.getUserPropertyResult(decryptedModel.userName);
+        }
         #endregion
 
         #region
